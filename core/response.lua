@@ -18,7 +18,7 @@ response.flush = function()
 	if type(ngx.ctx.result) == "string" and ngx.ctx.result ~= "" then
 		ngx.say(ngx.ctx.result)
 	else
-		ngx.say("{err_id:-1, msg:\"no result.\", info:{}}")
+		ngx.say("{\"err_id\":-1,\"msg\":\"no result.\", \"info\":{}}")
 	end
 	ngx.exit(ngx.HTTP_OK)
 	return true

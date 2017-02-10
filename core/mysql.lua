@@ -47,6 +47,8 @@ local _mysql = {
 			log.set(log.ERROR, string.format("failed to connect: %s: %s $s", err, errcode, sqlstate))
 		end
 
+		db:query("set names 'utf8'")
+
 		return db
 
 	end,
@@ -68,6 +70,7 @@ local _mysql = {
 			--tool.set_errlog(string.format("failed to connect: %s: %s $s", err, errcode, sqlstate))
 			log.set(log.ERROR, string.format("failed to connect: %s: %s $s", err, errcode, sqlstate))
 		end
+		db:query("set names 'utf8'")
 
 		return db
 	end,
@@ -89,13 +92,18 @@ local _mysql = {
 		table.insert(sql, ') VALUES(')
 
 		for k,v in pairs(info) do
-			table.insert(sql, tool.trans_data(v))
+			if type(v) == "number" then
+				table.insert(sql, v)
+			else
+				table.insert(sql, tool.trans_data(v))
+			end
 			table.insert(sql, ',')
 		end
 		table.remove(sql)
 		table.insert(sql, ')')
 		
 		sql = table.concat(sql)
+		--ngx.say(sql)
 
 		local res, err, errcode, sqlstate = db:query(sql)
 		if not res then 
@@ -162,7 +170,7 @@ local _mysql = {
 		table.remove(sql)
 
 		sql = table.concat(sql)
-		---ngx.say(sql)
+		--ngx.say(sql)
 
 		local res, err, errcode, sqlstate = db:query(sql)
 		if not res then 
@@ -197,7 +205,7 @@ local _mysql = {
 		end
 
 		sql = table.concat(sql)
-		--ngx.say(sql)
+		 --ngx.say(sql)
 
 		local res, err, errcode, sqlstate = db:query(sql)
 		if not res then 
@@ -215,6 +223,7 @@ local _mysql = {
 			--tool.set_errlog(string.format("ERROR SQL: [ %s ], bad result: %s: %s: %s.", sql, err, errcode, sqlstate))
 			log.set(log.ERROR, string.format("ERROR SQL: [ %s ], bad result: %s: %s: %s.", sql, err, errcode, sqlstate))
 		end
+		--ngx.say(sql)
 
 		_db_close(db, true)
 		return res
