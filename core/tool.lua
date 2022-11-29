@@ -145,7 +145,7 @@ local tool = {
 			source = smtp.message(mesgt),
 			server = "smtp.qiye.163.com",
 			user = "zili.qi@chivox.com",
-			password = "QZLy901107"
+			password = "******"
 		}
 		if not r then
 			ngx.say(e)
